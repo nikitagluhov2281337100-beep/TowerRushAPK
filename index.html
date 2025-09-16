@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TowerRush - Играй и выигрывай</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #0f0f1f;
+      color: white;
+      overflow-x:hidden;
+    }
+
+    /* Анимированный фон с точками */
+    canvas#bgCanvas {
+      position: fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      z-index:-1;
+    }
+
+    .container {max-width:1100px;margin:0 auto;padding:20px;text-align:center;}
+    .logo {
+      font-size:4rem;
+      font-weight:800;
+      background:linear-gradient(90deg,#ffd700,#ff4e50,#00ff88);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      text-shadow:0 0 40px rgba(255,215,0,0.7);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {from{text-shadow:0 0 15px #ffd700;} to{text-shadow:0 0 40px #ff4e50;}}
+    .subtitle {font-size:1.4rem;opacity:0.9;margin:1rem 0 3rem;}
+    .cta-button {
+      display:inline-block;
+      padding:20px 50px;
+      margin:15px;
+      font-size:1.4rem;
+      font-weight:700;
+      border-radius:50px;
+      background:linear-gradient(45deg,#00ff88,#00cc6a);
+      color:#000;
+      text-decoration:none;
+      box-shadow:0 10px 30px rgba(0,255,136,0.5);
+      transition:0.3s;
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
+    }
+    .cta-button:hover {transform:scale(1.07);box-shadow:0 20px 50px rgba(0,255,136,0.7);}
+    .cta-button::before {
+      content:'';
+      position:absolute;
+      top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent);
+      transition:0.5s;
+    }
+    .cta-button:hover::before {left:100%;}
+
+    .strategy-box {
+      margin:3rem auto;
+      padding:2rem;
+      border-radius:20px;
+      background:rgba(255,255,255,0.05);
+      backdrop-filter:blur(8px);
+      box-shadow:0 0 40px rgba(255,255,255,0.1);
+    }
+    .strategy-title {font-size:2rem;font-weight:800;margin-bottom:1rem;}
+    .strategy-steps {display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;}
+    .step {
+      flex:1 1 250px;
+      background:rgba(255,255,255,0.1);
+      border-radius:15px;
+      padding:1.5rem;
+      transition:0.3s;
+    }
+    .step:hover {transform:translateY(-8px);background:rgba(255,255,255,0.15);}
+    .step-number {font-size:2rem;font-weight:800;color:#ffd700;}
+    .step-text {margin-top:.5rem;font-weight:600;}
+
+    .promo-section {
+      margin:3rem auto;
+      padding:2rem;
+      border-radius:20px;
+      background:rgba(0,255,136,0.1);
+      box-shadow:0 0 30px rgba(0,255,136,0.3);
+    }
+    .promo-section h2 {font-size:1.8rem;margin-bottom:1rem;}
+
+    .floating {
+      position:fixed;
+      font-size:2rem;
+      opacity:0.1;
+      animation:float 6s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes float {0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+    .floating:nth-child(1){top:20%;left:10%;animation-delay:0s;}
+    .floating:nth-child(2){top:60%;right:15%;animation-delay:2s;}
+    .floating:nth-child(3){bottom:20%;left:20%;animation-delay:4s;}
+
+    .popup {
+      position:fixed;
+      top:50%;left:50%;transform:translate(-50%,-50%) scale(0.7);
+      background:#111;
+      color:#fff;
+      padding:2rem;
+      border-radius:15px;
+      box-shadow:0 0 40px rgba(0,0,0,0.7);
+      display:none;
+      z-index:999;
+      text-align:center;
+      opacity:0;
+      transition:all 0.4s ease;
+    }
+    .popup.active {
+      display:block;
+      transform:translate(-50%,-50%) scale(1);
+      opacity:1;
+    }
+    .popup a {
+      display:inline-block;
+      margin-top:1rem;
+      padding:15px 30px;
+      border-radius:30px;
+      background:linear-gradient(45deg,#ffd700,#ff4e50);
+      color:#000;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    @media(max-width:768px){
+      .logo{font-size:2.5rem;}
+      .cta-button{display:block;width:100%;margin:15px 0;}
+      .strategy-steps{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="floating">💰</div>
+  <div class="floating">⚡</div>
+  <div class="floating">🎲</div>
+
+  <div class="container">
+    <h1 class="logo">TOWER RUSH</h1>
+    <p class="subtitle">Строй башню • Лови x10 • Забирай выигрыш</p>
+
+    <!-- Заменено: теперь скачивание apk -->
+    <a href="TowerRush.apk" class="cta-button" download>📲 Скачать TowerRush</a>
+    <a href="https://t.me/+AlrGC9i0aG45ZjVi" class="cta-button" style="background:linear-gradient(45deg,#0088cc,#005f99);color:#fff;">📱 Тг канал с халявой</a>
+
+    <!-- Промокод -->
+    <div class="promo-section">
+      <h2>🎁 Промокод Tower10x</h2>
+      <p>Используй промокод <b>Tower10x</b> и получи <b>+500% к депозиту</b>!</p>
+      <button class="cta-button" id="copyPromo">📋 Скопировать код</button>
+    </div>
+
+    <!-- Тактика -->
+    <div class="strategy-box">
+      <h2 class="strategy-title">🎯 Секретная тактика X10</h2>
+      <div class="strategy-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-text">Ставка 500₽ 🎲</div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-text">Ставка 500₽ 💸</div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-text">Ставка 500₽ — Джекпот! 🏆</div>
+        </div>
+      </div>
+      <p style="margin-top:1rem;">Множество игроков уже увеличили баланс в 5–10 раз! 🔥</p>
+    </div>
+  </div>
+
+  <div class="popup" id="popup">
+    <p>✅ Промокод скопирован! Используй его при регистрации на 1Win.</p>
+    <a href="TowerRush.apk" download>📲 Скачать TowerRush</a>
+  </div>
+
+  <script>
+    // Фон с мерцающими точками
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let stars = [];
+    for(let i=0;i<120;i++){
+      stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
+    }
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle="white";
+      stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+        s.x+=s.dx;s.y+=s.dy;
+        if(s.x<0||s.x>canvas.width) s.dx*=-1;
+        if(s.y<0||s.y>canvas.height) s.dy*=-1;
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+    window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+
+    // Копирование промокода с popup
+    document.getElementById('copyPromo').addEventListener('click',()=>{
+      navigator.clipboard.writeText('Tower10x').then(()=>{
+        const popup = document.getElementById('popup');
+        popup.classList.add('active');
+        setTimeout(()=>{popup.classList.remove('active');},5000);
+      });
+    });
+  </script>
+</body>
+</html>
